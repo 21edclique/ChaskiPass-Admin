@@ -4,5 +4,9 @@
   },
   "devDependencies": {
     "@types/multer": "^1.4.12"
+  },
+  "scripts": {
+    "build": "echo 'No build process defined'",
+    "start": "node server.js"
   }
 }
