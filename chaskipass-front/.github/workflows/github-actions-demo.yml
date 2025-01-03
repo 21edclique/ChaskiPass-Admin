@@ -1,4 +1,4 @@
-name: Deploy test DAS
+name: Deploy Chaski Admin
 on: 
   push:
     branches:
