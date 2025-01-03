@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+
 
 interface ProtectedRouteProps {
     requiredRole?: string[];
