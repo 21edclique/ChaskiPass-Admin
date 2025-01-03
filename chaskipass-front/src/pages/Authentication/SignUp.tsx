@@ -8,7 +8,6 @@ import { CreateUserT } from '../../types';
 import createUser from '../../hooks/userCreation';
 import { useState } from 'react';
 import { MdEmail } from 'react-icons/md';
-import DataList from '../../components/DataList/datalist.components';
 import useCooperatives from '../../hooks/useCooperatives';
 
 const initialStateSignUp: CreateUserT = {
