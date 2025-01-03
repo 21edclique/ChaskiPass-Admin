@@ -70,7 +70,7 @@ function App() {
       ) : (
         <DefaultLayout>
           <Routes>
-            <Route
+            {/* <Route
               path='/'
               element={
                 <ProtectedRoute requiredRole={['superAdmin', 'clerk']}>
@@ -80,7 +80,7 @@ function App() {
                   </>
                 </ProtectedRoute>
               }
-            />
+            /> */}
            {/* <Route
               path="/profile"
               element={
