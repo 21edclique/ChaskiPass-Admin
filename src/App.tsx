@@ -56,7 +56,7 @@ function App() {
               path="/auth/signin"
               element={
                 
-                authUser ? <Navigate to='/' /> :
+                authUser ? <Navigate to='/register/cooperativesList' /> :
                 
                   <>
                     <PageTitle title="SignIn | ChaskiPass" />
@@ -70,17 +70,17 @@ function App() {
       ) : (
         <DefaultLayout>
           <Routes>
-            {/* <Route
-              path='/'
+            <Route
+              path='/register/cooperativesList'
               element={
-                <ProtectedRoute requiredRole={['superAdmin', 'clerk']}>
+                <ProtectedRoute requiredRole={['superAdmin']}>
                   <>
-                    <PageTitle title="eCommerce Dashboard | ChaskiPass" />
-                    <ECommerce />
+                    <PageTitle title="Routes  | ChaskiPass" />
+                    <CooperativesList />
                   </>
                 </ProtectedRoute>
               }
-            /> */}
+            />
            {/* <Route
               path="/profile"
               element={
@@ -103,19 +103,8 @@ function App() {
                 </ProtectedRoute>
               }
             /> */}
-            <Route
-              path="/auth/signup"
-              element={
-                <ProtectedRoute requiredRole={['superAdmin']}>
-                  <>
-                    <PageTitle title="Signin | ChaskiPass" />
-                    <SignUp />
-                  </>
-                </ProtectedRoute>
-              }
-            />
-            {/* Added by me  */}
-            <Route
+              {/* Added by me  */}
+              <Route
               path="/register/cooperatives"
               element={
 
@@ -127,6 +116,18 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/auth/signup"
+              element={
+                <ProtectedRoute requiredRole={['superAdmin']}>
+                  <>
+                    <PageTitle title="Signin | ChaskiPass" />
+                    <SignUp />
+                  </>
+                </ProtectedRoute>
+              }
+            />
+          
             <Route
               path="/register/cooperativesList"
               element={

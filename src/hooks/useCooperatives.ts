@@ -34,7 +34,7 @@ export default function useCooperatives() {
     const getCooperatives = async (): Promise<any[]> => {
         setLoading(true);
         try {
-            const response: Response = await fetch(`${API_BASE_URL}cooperatives/`, {
+            const response: Response = await fetch(`${API_BASE_URL}cooperatives/admin`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

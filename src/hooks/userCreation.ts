@@ -13,7 +13,7 @@ export default function createUser(){
         setLoading(true);
         console.log(userData);
         try {
-            const response:Response = await fetch(`${API_BASE_URL}users/signUp`,{
+            const response:Response = await fetch(`${API_BASE_URL}users/signUp/admin`,{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json',

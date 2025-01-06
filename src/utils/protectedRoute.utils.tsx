@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 
 interface ProtectedRouteProps {
@@ -23,7 +24,13 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
     //     }
     // }, [authUser, requiredRole]);
 
-    // Si hay una ruta de redirección, redirige
+    useEffect(() => {
+        if (!authUser) {
+          // Si el usuario no está autenticado, redirige al inicio de sesión
+          setRedirectPath('/auth/signin');
+        }
+      }, [authUser]);
+    
     if (redirectPath) {
         return <Navigate to={redirectPath} replace />;
     }
