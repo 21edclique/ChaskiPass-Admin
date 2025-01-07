@@ -14,39 +14,64 @@ const initialStateCooperative: CreateCooperativeT = {
   description: ''
 };
 
-// Simulación de una lista de cooperativas ya existentes (esto normalmente lo harías con una API)
 const existingCooperatives = ['123', '456', '789'];
 
 const Cooperatives: React.FC = () => {
   const [inputCooperative, setInputCooperative] = useState<CreateCooperativeT>(initialStateCooperative);
   const { loading, createCooperative } = usecreateCooperative();  
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputCooperative({
       ...inputCooperative,
       [e.target.id]: e.target.value,
     });
+    setErrors({
+      ...errors,
+      [e.target.id]: '', // Limpiar error cuando se modifica el campo
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    let hasError = false;
+    const newErrors: { [key: string]: string } = {};
 
-    // Validaciones: Campos vacíos
-    if (
-    //   !inputCooperative.id ||
-      !inputCooperative.name ||
-      !inputCooperative.address ||
-      !inputCooperative.phone ||
-      !inputCooperative.email ||
-      !inputCooperative.description
-    ) {
-      toast.error('Todos los campos son obligatorios');
-      return;
+    // Validaciones separadas para cada campo (sin incluir description)
+    if (!inputCooperative.id) {
+      newErrors.id = 'El ID de la cooperativa es obligatorio';
+      hasError = true;
+    }
+
+    if (!inputCooperative.name) {
+      newErrors.name = 'El nombre de la cooperativa es obligatorio';
+      hasError = true;
+    }
+
+    if (!inputCooperative.address) {
+      newErrors.address = 'La dirección es obligatoria';
+      hasError = true;
+    }
+
+    if (!inputCooperative.phone) {
+      newErrors.phone = 'El teléfono es obligatorio';
+      hasError = true;
+    }
+
+    if (!inputCooperative.email) {
+      newErrors.email = 'El correo electrónico es obligatorio';
+      hasError = true;
     }
 
     // Validación: ID duplicado
     if (existingCooperatives.includes(inputCooperative.id)) {
-      toast.error('El ID de la cooperativa ya existe');
+      newErrors.id = 'El ID de la cooperativa ya existe';
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      toast.error('Por favor, complete todos los campos obligatorios');
       return;
     }
 
@@ -83,6 +108,7 @@ const Cooperatives: React.FC = () => {
                   className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
+              {errors.id && <p className="text-red-500 text-sm mt-1">{errors.id}</p>}
             </div>
 
             <div className="mb-4 w-full sm:w-1/2">
@@ -99,6 +125,7 @@ const Cooperatives: React.FC = () => {
                   className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
           </div>
 
@@ -120,6 +147,7 @@ const Cooperatives: React.FC = () => {
                   <FaMapMarkedAlt className="w-[22px] h-[22px]" />
                 </span>
               </div>
+              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
             </div>
 
             <div className="mb-4 w-full sm:w-1/2">
@@ -139,6 +167,7 @@ const Cooperatives: React.FC = () => {
                   <FaPhoneAlt className="w-[22px] h-[22px]" />
                 </span>
               </div>
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
           </div>
 
@@ -159,6 +188,7 @@ const Cooperatives: React.FC = () => {
                 <FaEnvelope className="w-[22px] h-[22px]" />
               </span>
             </div>
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
           <div className="mb-4">
@@ -177,6 +207,7 @@ const Cooperatives: React.FC = () => {
                 <MdDescription className="w-[22px] h-[22px]" />
               </span>
             </div>
+            {/* No validación para description */}
           </div>
 
           <div className="mb-4">

@@ -16,15 +16,15 @@ const initialData: cooperativeT ={
 };
 
 const Profile = () => {
-
   const [cooperativeInputs, setCooperativeInputs] = useState<cooperativeT>(initialData);
-  const {getCooperativeByID} = useCooperatives();
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const { getCooperativeByID } = useCooperatives();
 
-  useEffect(()=> {
-    const fetchCooperative= async()=>{
+  useEffect(() => {
+    const fetchCooperative = async () => {
       const storageData = localStorage.getItem('chaski-log');
-      let cooperativeID:string
-      if(storageData){
+      let cooperativeID: string;
+      if (storageData) {
         const data = JSON.parse(storageData);
         cooperativeID = data.cooperative;
       }
@@ -33,8 +33,37 @@ const Profile = () => {
       setCooperativeInputs(cooperative);
     };
     fetchCooperative();
-  },[]);
+  }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCooperativeInputs((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setErrors((prev) => ({ ...prev, [name]: '' })); // Clear error when user starts typing
+  };
+
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+    // Validación de campos obligatorios
+    if (!cooperativeInputs.name) newErrors.name = 'El nombre de la cooperativa es obligatorio.';
+    if (!cooperativeInputs.address) newErrors.address = 'La dirección es obligatoria.';
+    if (!cooperativeInputs.phone) newErrors.phone = 'El teléfono es obligatorio.';
+    else if (!/^\d+$/.test(cooperativeInputs.phone)) newErrors.phone = 'El teléfono debe ser solo numérico.';
+    if (!cooperativeInputs.email) newErrors.email = 'El correo electrónico es obligatorio.';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Enviar datos si la validación es correcta
+      console.log('Formulario enviado:', cooperativeInputs);
+    }
+  };
 
   return (
     <>
@@ -72,7 +101,7 @@ const Profile = () => {
             </h3>
             <p className="font-medium">Cooperativa De Buses</p>
             <div className="w-full">
-              <form action="">
+              <form onSubmit={handleSubmit}>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row ">
                   <div className="w-full sm:w-[50%]">
                     <label
@@ -85,10 +114,13 @@ const Profile = () => {
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-1 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="text"
-                        name="cooperativeName"
+                        name="name"
                         id="cooperativeName"
                         value={cooperativeInputs.name}
+                        onChange={handleChange}
+                        required
                       />
+                      {errors.name && <p className="text-sm text-red-600">{errors.name}</p>}
                     </div>
                   </div>
                   <div className="w-full sm:w-[85%]">
@@ -96,17 +128,19 @@ const Profile = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white text-left"
                       htmlFor="address"
                     >
-                      Direccion
+                      Dirección
                     </label>
                     <div className="relative">
-                      
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-1 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="text"
                         name="address"
                         id="address"
                         value={cooperativeInputs.address}
+                        onChange={handleChange}
+                        required
                       />
+                      {errors.address && <p className="text-sm text-red-600">{errors.address}</p>}
                     </div>
                   </div>
                   <div className="w-full sm:w-[50%]">
@@ -114,7 +148,7 @@ const Profile = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white text-left"
                       htmlFor="phone"
                     >
-                      telefono
+                      Teléfono
                     </label>
                     <div className="relative">
                       <input
@@ -123,7 +157,11 @@ const Profile = () => {
                         name="phone"
                         id="phone"
                         value={cooperativeInputs.phone}
+                        onChange={handleChange}
+                        pattern="^[0-9]+$"
+                        required
                       />
+                      {errors.phone && <p className="text-sm text-red-600">{errors.phone}</p>}
                     </div>
                   </div>
                   <div className="w-full sm:w-[50%]">
@@ -131,20 +169,26 @@ const Profile = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white text-left"
                       htmlFor="mail"
                     >
-                      email
+                      Email
                     </label>
                     <div className="relative">
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-1 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                        type="text"
-                        name="mail"
+                        type="email"
+                        name="email"
                         id="mail"
                         value={cooperativeInputs.email}
+                        onChange={handleChange}
+                        required
                       />
+                      {errors.email && <p className="text-sm text-red-600">{errors.email}</p>}
                     </div>
                   </div>
                 </div>
 
+                <button type="submit" className="btn btn-primary mt-4">
+                  Guardar
+                </button>
               </form>
             </div>
           </div>
